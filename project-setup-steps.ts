@@ -40,3 +40,6 @@
 
 // add this to package.json
 // "dev": "tsx watch src/server.ts",
+
+//to start the development server
+//npm run dev
