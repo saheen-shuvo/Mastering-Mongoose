@@ -31,3 +31,12 @@
 
 //to fix linting errors
 //npm run lint:fix
+
+// npm i --save-dev eslint-config-prettier
+
+// npm i ts-node-dev --save-dev
+
+// npm install -D ts-node-dev
+
+// add this to package.json
+// "dev": "tsx watch src/server.ts",
