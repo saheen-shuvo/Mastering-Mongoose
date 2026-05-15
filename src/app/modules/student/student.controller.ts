@@ -3,8 +3,8 @@ import { StudentService } from "./student.service";
 
 const createStudent = async (req: Request, res: Response) => {
   try {
-    const student = req.body;
-    const result = await StudentService.createStudentIntoDB(student);
+    const {student: studentData} = req.body;
+    const result = await StudentService.createStudentIntoDB(studentData);
 
     res.status(200).json({
       success: true,
@@ -12,6 +12,7 @@ const createStudent = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Failed to create student",
