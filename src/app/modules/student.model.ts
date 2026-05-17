@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { Guardian, LocalGuardian, Student, UserName } from "./student/student.interface";
+import validator from "validator";
 
 const userNameSchema = new Schema<UserName>({
     firstName: {type: String, required: [true, "First name is required"], maxLength: [20, "First name should be less than 20 characters"], trim: true, validate: {
@@ -10,7 +11,10 @@ const userNameSchema = new Schema<UserName>({
         message: "{VALUE} should start with a capital letter"
     }},
     middleName: {type: String, maxLength: [20, "Middle name should be less than 20 characters"], trim: true},
-    lastName: {type: String, required: [true, "Last name is required"], trim: true}
+    lastName: {type: String, required: [true, "Last name is required"], trim: true, validate: {
+        validator: (value: string) => validator.isAlpha(value),
+        message: "{VALUE} should contain only letters"
+    }}
 });
 
 const guardianSchema = new Schema<Guardian>({
@@ -47,7 +51,10 @@ const studentSchema = new Schema<Student>({
         required: [true, "Gender is required"]
     },
     dateOfBirth: {type: String, trim: true},
-    email: {type: String, required: [true, "Email is required"], unique: true},
+    email: {type: String, required: [true, "Email is required"], unique: true, validate: {
+        validator: (value: string) => validator.isEmail(value),
+        message: "{VALUE} is not a valid email"
+    }},
     contactNo: {type: String, required: [true, "Contact number is required"], trim: true},
     emergencyContactNo: {type: String, required: [true, "Emergency contact number is required"], trim: true},
     bloodGroup: {
