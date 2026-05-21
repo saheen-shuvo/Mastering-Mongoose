@@ -1,8 +1,8 @@
 import { Schema, model } from "mongoose";
-import { Guardian, LocalGuardian, Student, UserName } from "./student/student.interface";
+import { TGuardian, TLocalGuardian, TStudent, StudentMethods, StudentModel, TUserName } from "./student/student.interface";
 import validator from "validator";
 
-const userNameSchema = new Schema<UserName>({
+const userNameSchema = new Schema<TUserName>({
     firstName: {type: String, required: [true, "First name is required"], maxLength: [20, "First name should be less than 20 characters"], trim: true, validate: {
         validator: function(value: string){
             const firstNameValue = value.charAt(0).toUpperCase() + value.slice(1);
@@ -17,7 +17,7 @@ const userNameSchema = new Schema<UserName>({
     }}
 });
 
-const guardianSchema = new Schema<Guardian>({
+const guardianSchema = new Schema<TGuardian>({
     fatherName: {type: String, required: [true, "Father name is required"], trim: true},
     fatherOccupation: {type: String, required: [true, "Father occupation is required"], trim: true},
     fatherContactNo: {type: String, required: [true, "Father contact number is required"], trim: true},
@@ -26,7 +26,7 @@ const guardianSchema = new Schema<Guardian>({
     motherContactNo: {type: String, required: [true, "Mother contact number is required"], trim: true}
 });
 
-const localGuardianSchema = new Schema<LocalGuardian>({
+const localGuardianSchema = new Schema<TLocalGuardian>({
     name: {type: String, required: [true, "Name is required"], trim: true},
     occupation: {type: String, required: [true, "Occupation is required"], trim: true},
     contactNo: {type: String, required: [true, "Contact number is required"], trim: true},
@@ -35,7 +35,7 @@ const localGuardianSchema = new Schema<LocalGuardian>({
 
 
 //Main student schema
-const studentSchema = new Schema<Student>({
+const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
     id: {type: String, required: [true, "Student ID is required"], unique: true},
     name: {
         type: userNameSchema,
@@ -82,6 +82,11 @@ const studentSchema = new Schema<Student>({
     }
 })
 
-const StudentModel = model<Student>("Student", studentSchema)
+studentSchema.methods.isUserExists = async function(id: string){
+    const existingUser = await Student.findOne({id: id});
+    return existingUser;
+}
 
-export default StudentModel;
+const Student = model<TStudent, StudentModel>("Student", studentSchema)
+
+export default Student;
