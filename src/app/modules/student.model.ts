@@ -82,6 +82,24 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
     }
 })
 
+//MONGOOSE MIDDLEWARE
+//here i have not used arrow function because i need to access "this" keyword which is not possible in arrow function
+//before bcrypt password hashing, i have to install bcrypt package and import it here which i didn't do
+//Pre save hook for hashing password
+
+// studentSchema.pre("save", async function(next){
+    // const student = this;
+    // const salt = await bcrypt.genSalt(10); --this will write in .env file as BCRYPT_SALT_ROUNDS=10
+    // const hashedPassword = await bcrypt.hash(student.password, salt);
+    // student.password = hashedPassword;
+    // next();
+// })
+
+//Post save hook for logging
+// studentSchema.post("save", function(){
+//     console.log("Student saved successfully");
+// });
+
 studentSchema.methods.isUserExists = async function(id: string){
     const existingUser = await Student.findOne({id: id});
     return existingUser;
