@@ -80,6 +80,15 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
         enum: ["active", "blocked"],
         default: "active"
     }
+}, {
+    toJSON: {
+        virtuals: true
+    }
+})
+
+// VIRTUALS
+studentSchema.virtual("fullName").get(function(){
+    return `${this.name.firstName} ${this.name.middleName ? this.name.middleName + " " : ""}${this.name.lastName}`;
 })
 
 //MONGOOSE MIDDLEWARE
