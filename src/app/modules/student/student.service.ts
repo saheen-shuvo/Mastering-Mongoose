@@ -27,9 +27,15 @@ const deleteStudentFromDB = async (id: string) => {
     return result;
 }
 
+const updateStudent = async (id: string, updatedData: Partial<TStudent>) => {
+    const result = await Student.updateOne({id: id}, updatedData);
+    return result;
+}
+
 export const StudentService = {
     createStudentIntoDB,
     getAllStudentsFromDB,
     getSingleStudentFromDB,
-    deleteStudentFromDB
+    deleteStudentFromDB,
+    updateStudent
 }

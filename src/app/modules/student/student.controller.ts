@@ -102,9 +102,32 @@ const deleteStudent = async (req: Request, res: Response) => {
     }
 };
 
+const updateStudent = async (req: Request, res: Response) => {
+    try {
+        const { studentId } = req.params;
+        const updatedData = req.body; 
+        //example of updatedData: {name: {firstName: "New name"}} 
+        const result = await StudentService.updateStudent(studentId as string, updatedData);
+
+        res.status(200).json({
+            success: true,
+            message: "Student updated successfully",
+            data: result
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to update student",
+            error: error
+        })
+    }
+};
+
 export const StudentController = {
   createStudent,
   getAllStudents,
   getSingleStudent,
-  deleteStudent
+  deleteStudent,
+  updateStudent
 };
