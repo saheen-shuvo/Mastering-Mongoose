@@ -12,4 +12,6 @@ router.post("/create-student", StudentController.createStudent);
 // http://localhost:3000/api/v1/students/STU12346, Here add the student id in the params
 router.get("/:studentId", StudentController.getSingleStudent);
 
+router.delete("/:studentId", StudentController.deleteStudent);
+
 export const StudentRoute = router;

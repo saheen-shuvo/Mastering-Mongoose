@@ -79,7 +79,8 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
         type: String,
         enum: ["active", "blocked"],
         default: "active"
-    }
+    },
+    isDeleted: {type: Boolean, default: false}
 }, {
     toJSON: {
         virtuals: true
@@ -108,6 +109,19 @@ studentSchema.virtual("fullName").get(function(){
 // studentSchema.post("save", function(){
 //     console.log("Student saved successfully");
 // });
+
+// QUERY MIDDLEWARE
+studentSchema.pre("find", function(){
+    this.find({isDeleted: {$ne: true}});
+});
+
+studentSchema.pre("findOne", function(){
+    this.find({isDeleted: {$ne: true}});
+});
+
+studentSchema.pre("aggregate", function(){
+    this.pipeline().unshift({$match: {isDeleted: {$ne: true}}});
+});
 
 studentSchema.methods.isUserExists = async function(id: string){
     const existingUser = await Student.findOne({id: id});
